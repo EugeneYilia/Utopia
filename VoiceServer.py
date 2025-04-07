@@ -6,7 +6,7 @@ from pathlib import Path
 from pydub import AudioSegment
 import os
 from TTSConverter import generate_tts_audio
-
+from fastapi.responses import JSONResponse
 import logging
 logger = logging.getLogger(__name__)
 app = FastAPI()
@@ -38,9 +38,10 @@ def generate_tts(request: TTSRequest):
     os.remove(raw_wav_path)
     # os.remove(final_wav_path)
 
-    logger.info("Audio file generated and removed: %s", final_wav_path)
+    logger.info("Audio file generated and removed: %s", raw_wav_path)
 
-    return base64.b64encode(audio_value).decode("utf-8")
+    base64_audio =  base64.b64encode(audio_value).decode("utf-8")
+    return JSONResponse(content={"audio": base64_audio})
 
 # 启动Uvicorn服务器
 if __name__ == "__main__":
