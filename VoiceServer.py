@@ -36,7 +36,9 @@ def generate_tts(request: TTSRequest):
         audio_value = audio_file.read()
 
     os.remove(raw_wav_path)
-    os.remove(final_wav_path)
+    # os.remove(final_wav_path)
+
+    logger.info("Audio file generated and removed: %s", final_wav_path)
 
     return base64.b64encode(audio_value).decode("utf-8")
 
