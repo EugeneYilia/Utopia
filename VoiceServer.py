@@ -10,7 +10,7 @@ from TTSConverter import generate_tts_audio
 app = FastAPI()
 class TTSRequest(BaseModel):
     text: str
-    is_male: bool
+    voice_id: str
 
 @app.post("/tts")
 def generate_tts(request: TTSRequest):
@@ -21,7 +21,7 @@ def generate_tts(request: TTSRequest):
     raw_wav_path = output_dir / f"{output_filename}_raw.wav"  # 初始语音输出
     final_wav_path = output_dir / f"{output_filename}.wav"  # 转换后的音频输出
 
-    generate_tts_audio(request.is_male, request.text, str(raw_wav_path))
+    generate_tts_audio(request.voice_id, request.text, str(raw_wav_path))
 
     # 强制转换为 16kHz 单声道 WAV（确保兼容性）
     sound = AudioSegment.from_file(raw_wav_path)

@@ -34,17 +34,17 @@ tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
 #     file_path="output/female.wav"
 # )
 
-def generate_tts_audio(is_male: bool, text: str, output_path: str):
+def generate_tts_audio(voice_id: str, text: str, output_path: str):
     Path(output_path).parent.mkdir(exist_ok=True)
 
-    if is_male:
+    if voice_id == "male":
         tts.tts_to_file(
             text=text,
             speaker_wav="male.wav",
             language="zh",
             file_path=output_path
         )
-    else:
+    elif voice_id == "female":
         tts.tts_to_file(
             text=text,
             speaker_wav="female.wav",
