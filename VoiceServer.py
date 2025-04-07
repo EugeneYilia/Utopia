@@ -7,6 +7,8 @@ from pydub import AudioSegment
 import os
 from TTSConverter import generate_tts_audio
 
+import logging
+logger = logging.getLogger(__name__)
 app = FastAPI()
 class TTSRequest(BaseModel):
     text: str
@@ -14,6 +16,7 @@ class TTSRequest(BaseModel):
 
 @app.post("/tts")
 def generate_tts(request: TTSRequest):
+    logger.info("Received TTS request: %s", request)
     # Create a unique filename
     output_dir = Path("output")
     output_filename = f"{uuid.uuid4().hex}"
