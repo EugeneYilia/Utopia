@@ -36,3 +36,15 @@ def generate_tts(request: TTSRequest):
     os.remove(final_wav_path)
 
     return base64.b64encode(audio_value).decode("utf-8")
+
+# 启动Uvicorn服务器
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "VoiceServer:app",
+        host="0.0.0.0",
+        port=8118,
+        reload=True,
+        log_config="log_config.yml"
+    )
