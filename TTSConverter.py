@@ -16,8 +16,7 @@ if not SystemConfig.is_use_gpu:
 
 Path("output").mkdir(exist_ok=True)
 
-tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
-
+tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=SystemConfig.is_use_gpu)
 
 # tts.tts_to_file(
 #     text="大家好，我是鲁大魔，鲁岳，吉安电子这家公司特别好，强烈推荐。",
