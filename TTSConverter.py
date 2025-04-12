@@ -1,14 +1,18 @@
 from TTS.api import TTS
 from pathlib import Path
 from TTS.utils.radam import RAdam
-from torch.serialization import add_safe_globals
-from TTS.tts.configs.xtts_config import XttsConfig
+
 from builtins import dict
 from collections import defaultdict
 from TTS.config.shared_configs import BaseDatasetConfig
-from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
 
-add_safe_globals([XttsConfig, XttsAudioConfig, BaseDatasetConfig, XttsArgs, defaultdict, dict, RAdam])
+import SystemConfig
+
+if not SystemConfig.is_use_gpu:
+    from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
+    from torch.serialization import add_safe_globals
+    from TTS.tts.configs.xtts_config import XttsConfig
+    add_safe_globals([XttsConfig, XttsAudioConfig, BaseDatasetConfig, XttsArgs, defaultdict, dict, RAdam])
 
 Path("output").mkdir(exist_ok=True)
 
