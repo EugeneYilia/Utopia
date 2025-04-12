@@ -1,0 +1,18 @@
+--index-url https://download.pytorch.org/whl/cu121
+
+torch==2.3.0+cu121
+transformers
+whisper
+gradio
+jieba
+requests
+Pillow
+OpenCC
+soundfile
+python-docx
+numpy
+scipy
+TTS
+pydub
+colorama
+colorlog
