@@ -9,7 +9,7 @@ numpy==1.22.0
 # 音频处理
 soundfile
 pydub
-scipy==1.9.3
+scipy==1.11.2
 
 # Web API
 fastapi
