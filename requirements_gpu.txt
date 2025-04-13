@@ -1,35 +1,36 @@
- # 使用清华源或默认源都可，以下使用官方推荐源
 --extra-index-url https://download.pytorch.org/whl/cu121
 
-# 固定版本，确保 XTTS 可运行
-torch==2.0.1
-torchaudio==2.0.1
+# 核心依赖（匹配你要求）
+torch==2.3.0+cu121
+torchaudio==2.3.0
 TTS==0.17.1
+numpy==1.23.5
 
-# 语言模型支持
-transformers
+# 音频处理
+soundfile
+pydub
+scipy==1.9.3
 
-# Whisper 语音识别
-whisper
+# Web API
+fastapi
+uvicorn
 
-# 中文处理工具
+# 中文文本处理
 jieba
 OpenCC
 
-# Web UI 和用户交互
+# 文本/图像
+transformers
+Pillow
+python-docx
+
+# AI/语音识别
+whisper
+
+# 前端 Web UI
 gradio
 requests
-Pillow
 
-# 语音与音频处理
-soundfile
-pydub
-numpy
-scipy
-
-# 日志与调试美化
+# 日志美化
 colorama
 colorlog
-
-# 文档操作
-python-docx
