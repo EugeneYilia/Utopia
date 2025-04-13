@@ -7,6 +7,7 @@ from collections import defaultdict
 from TTS.config.shared_configs import BaseDatasetConfig
 
 import SystemConfig
+import torch
 
 if not SystemConfig.is_use_gpu:
     from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
@@ -16,8 +17,12 @@ if not SystemConfig.is_use_gpu:
 
 Path("output").mkdir(exist_ok=True)
 
-tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=SystemConfig.is_use_gpu)
+tts = TTS(
+        model_name="tts_models/multilingual/multi-dataset/xtts_v2",
+        gpu=SystemConfig.is_use_gpu)
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+tts.to(device)
 # tts.tts_to_file(
 #     text="大家好，我是鲁大魔，鲁岳，吉安电子这家公司特别好，强烈推荐。",
 #     speaker_wav="output.wav",
