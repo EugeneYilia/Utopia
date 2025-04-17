@@ -23,24 +23,6 @@ tts = TTS(
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 tts.to(device)
-# tts.tts_to_file(
-#     text="大家好，我是鲁大魔，鲁岳，吉安电子这家公司特别好，强烈推荐。",
-#     speaker_wav="output.wav",
-#     language="zh",
-#     file_path="output/male.wav"
-# )
-
-
-# MODEL_NAME = "tts_models/zh-CN/baker/tacotron2-DDC-GST"
-# tts = TTS(model_name=MODEL_NAME, progress_bar=True, gpu=False)
-# tts.tts_to_file(text="大家好，我是冯提莫，吉安电子这家公司特别好，强烈推荐。", file_path="output/female2.wav")
-
-# tts.tts_to_file(
-#     text="大家好，我是冯提莫，吉安电子这家公司特别好，强烈推荐。",
-#     speaker_wav="female.wav",
-#     language="zh",
-#     file_path="output/female.wav"
-# )
 
 def generate_tts_audio(voice_id: str, text: str, output_path: str):
     Path(output_path).parent.mkdir(exist_ok=True)
@@ -59,3 +41,22 @@ def generate_tts_audio(voice_id: str, text: str, output_path: str):
             language="zh",
             file_path=output_path
         )
+
+# tts.tts_to_file(
+#     text="大家好，我是鲁大魔，鲁岳，吉安电子这家公司特别好，强烈推荐。",
+#     speaker_wav="output.wav",
+#     language="zh",
+#     file_path="output/male.wav"
+# )
+
+
+# MODEL_NAME = "tts_models/zh-CN/baker/tacotron2-DDC-GST"
+# tts = TTS(model_name=MODEL_NAME, progress_bar=True, gpu=False)
+# tts.tts_to_file(text="大家好，我是冯提莫，吉安电子这家公司特别好，强烈推荐。", file_path="output/female2.wav")
+
+# tts.tts_to_file(
+#     text="大家好，我是冯提莫，吉安电子这家公司特别好，强烈推荐。",
+#     speaker_wav="female.wav",
+#     language="zh",
+#     file_path="output/female.wav"
+# )
