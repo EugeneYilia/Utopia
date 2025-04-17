@@ -8,21 +8,26 @@ from TTS.config.shared_configs import BaseDatasetConfig
 
 import SystemConfig
 import torch
-
-if not SystemConfig.is_use_gpu:
-    from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
-    from torch.serialization import add_safe_globals
-    from TTS.tts.configs.xtts_config import XttsConfig
-    add_safe_globals([XttsConfig, XttsAudioConfig, BaseDatasetConfig, XttsArgs, defaultdict, dict, RAdam])
+import os
 
 Path("output").mkdir(exist_ok=True)
 
-tts = TTS(
-        model_name="tts_models/multilingual/multi-dataset/xtts_v2",
-        gpu=SystemConfig.is_use_gpu)
+tts = None
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-tts.to(device)
+def init_model():
+    global tts
+    if not SystemConfig.is_use_gpu:
+        from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
+        from torch.serialization import add_safe_globals
+        from TTS.tts.configs.xtts_config import XttsConfig
+        add_safe_globals([XttsConfig, XttsAudioConfig, BaseDatasetConfig, XttsArgs, defaultdict, dict, RAdam])
+
+    if tts is None:
+        print(f"[PID={os.getpid()}] ⏳ 初始化 TTS 模型...")
+        tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=SystemConfig.is_use_gpu)
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        tts.to(device)
+        print(f"[PID={os.getpid()}] ✅ 初始化完成")
 
 def generate_tts_audio(voice_id: str, text: str, output_path: str):
     Path(output_path).parent.mkdir(exist_ok=True)
