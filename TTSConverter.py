@@ -30,8 +30,8 @@ def init_model():
         print(f"[PID={os.getpid()}] ✅ 初始化完成")
 
 def generate_tts_audio(voice_id: str, text: str, output_path: str):
-    Path(output_path).parent.mkdir(exist_ok=True)
 
+    global tts
     if voice_id == "male":
         tts.tts_to_file(
             text=text,
