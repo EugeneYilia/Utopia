@@ -3,7 +3,7 @@ import asyncio
 
 import TTSConverter
 
-max_workers = 3
+max_workers = 2
 executor = ProcessPoolExecutor(max_workers=max_workers)
 
 # 主程序启动时执行：让每个子进程先初始化一次 TTS
