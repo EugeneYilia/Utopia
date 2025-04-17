@@ -8,7 +8,11 @@ import os
 from TTSConverter import generate_tts_audio
 from fastapi.responses import JSONResponse
 import logging
+
 logger = logging.getLogger(__name__)
+
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+
 app = FastAPI()
 class TTSRequest(BaseModel):
     text: str
