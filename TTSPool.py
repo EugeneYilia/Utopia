@@ -10,6 +10,7 @@ from collections import defaultdict
 import torch
 import os
 from pathlib import Path
+import uuid
 
 Path("output").mkdir(exist_ok=True)
 
@@ -23,11 +24,12 @@ class TTSThreadWorker:
             from TTS.tts.configs.xtts_config import XttsConfig
             add_safe_globals([XttsConfig, XttsAudioConfig, BaseDatasetConfig, XttsArgs, defaultdict, dict, RAdam])
 
-        print(f"[Thread {id}] ⏳ 初始化 TTS 模型...")
+        serial_number = f"{uuid.uuid4().hex}"
+        print(f"[Thread {id}]  {serial_number}⏳ 初始化 TTS 模型...")
         self.tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=SystemConfig.is_use_gpu)
         device = "cuda" if torch.cuda.is_available() else "cpu"
         self.tts.to(device)
-        print(f"[Thread {id}] ✅ TTS 实例初始化完成")
+        print(f"[Thread {id}]  {serial_number}✅ TTS 实例初始化完成")
 
     def synthesize(self, voice_id: str, text: str, output_path: str):
         print(f"[Thread {self.id}] 开始生成音频")
