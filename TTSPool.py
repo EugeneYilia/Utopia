@@ -2,11 +2,31 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from TTS.api import TTS
 import asyncio
+import SystemConfig
+from TTS.utils.radam import RAdam
+from TTS.config.shared_configs import BaseDatasetConfig
+from builtins import dict
+from collections import defaultdict
+import torch
+import os
+from pathlib import Path
+
+Path("output").mkdir(exist_ok=True)
 
 class TTSThreadWorker:
     def __init__(self, id):
         self.id = id
-        self.tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
+
+        if not SystemConfig.is_use_gpu:
+            from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
+            from torch.serialization import add_safe_globals
+            from TTS.tts.configs.xtts_config import XttsConfig
+            add_safe_globals([XttsConfig, XttsAudioConfig, BaseDatasetConfig, XttsArgs, defaultdict, dict, RAdam])
+
+        print(f"[Thread {id}] ⏳ 初始化 TTS 模型...")
+        self.tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=SystemConfig.is_use_gpu)
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.tts.to(device)
         print(f"[Thread {id}] ✅ TTS 实例初始化完成")
 
     def synthesize(self, voice_id: str, text: str, output_path: str):

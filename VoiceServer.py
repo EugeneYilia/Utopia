@@ -7,7 +7,6 @@ from pydub import AudioSegment
 import os
 
 import TTSConverter
-import TTSWorker
 from fastapi.responses import JSONResponse
 import logging
 
@@ -57,8 +56,6 @@ async def generate_tts(request: TTSRequest):
 # 启动Uvicorn服务器
 if __name__ == "__main__":
     import uvicorn
-
-    # TTSWorker.preload_tts_model_in_all_workers()
 
     uvicorn.run(
         "VoiceServer:app",
