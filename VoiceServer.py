@@ -53,7 +53,6 @@ async def generate_tts(request: TTSRequest):
     base64_audio =  base64.b64encode(audio_value).decode("utf-8")
     return JSONResponse(content={"audio": base64_audio})
 
-# 启动Uvicorn服务器
 if __name__ == "__main__":
     import uvicorn
 
