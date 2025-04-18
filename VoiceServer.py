@@ -6,7 +6,6 @@ from pathlib import Path
 from pydub import AudioSegment
 import os
 
-import TTSConverter
 from fastapi.responses import JSONResponse
 import logging
 
@@ -15,6 +14,8 @@ from TTSPool import TTSPool
 logger = logging.getLogger(__name__)
 
 os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+
+logger.info(f"Running process: {os.getpid()}")
 
 tts_pool = TTSPool(num_workers=3)
 
