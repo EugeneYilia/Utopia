@@ -5,13 +5,18 @@ import uuid
 from pathlib import Path
 from pydub import AudioSegment
 import os
-from TTSConverter import generate_tts_audio
+
+import TTSConverter
 from fastapi.responses import JSONResponse
 import logging
+
+from TTSPool import TTSPool
 
 logger = logging.getLogger(__name__)
 
 os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+
+tts_pool = TTSPool(num_workers=3)
 
 app = FastAPI()
 class TTSRequest(BaseModel):
@@ -19,7 +24,7 @@ class TTSRequest(BaseModel):
     voice_id: str
 
 @app.post("/tts")
-def generate_tts(request: TTSRequest):
+async def generate_tts(request: TTSRequest):
     logger.info("Received TTS request: %s", request)
     # Create a unique filename
     output_dir = Path("output")
@@ -28,7 +33,8 @@ def generate_tts(request: TTSRequest):
     raw_wav_path = output_dir / f"{output_filename}_raw.wav"  # 初始语音输出
     final_wav_path = output_dir / f"{output_filename}.wav"  # 转换后的音频输出
 
-    generate_tts_audio(request.voice_id, request.text, str(raw_wav_path))
+    # await TTSWorker.get_audio(request.voice_id, request.text, str(raw_wav_path))
+    await tts_pool.generate(request.voice_id, request.text, str(raw_wav_path))
 
     # 强制转换为 16kHz 单声道 WAV（确保兼容性）
     sound = AudioSegment.from_file(raw_wav_path)
@@ -47,7 +53,6 @@ def generate_tts(request: TTSRequest):
     base64_audio =  base64.b64encode(audio_value).decode("utf-8")
     return JSONResponse(content={"audio": base64_audio})
 
-# 启动Uvicorn服务器
 if __name__ == "__main__":
     import uvicorn
 
@@ -55,6 +60,6 @@ if __name__ == "__main__":
         "VoiceServer:app",
         host="0.0.0.0",
         port=8118,
-        reload=True,
+        reload=False,
         log_config="log_config.yml"
     )
