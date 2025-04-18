@@ -5,7 +5,7 @@ import uuid
 from pathlib import Path
 from pydub import AudioSegment
 import os
-
+from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
 import logging
 
@@ -20,7 +20,18 @@ logger.info(f"Running process: {os.getpid()}")
 
 tts_pool = TTSPool(num_workers=3)
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ✅ 启动前执行
+    logger.info("FastAPI 启动：is_use_gpu: %s", SystemConfig.is_use_gpu)
+    logger.info("FastAPI 启动：is_dev_mode: %s", SystemConfig.is_dev_mode)
+
+    yield  # 🟢 应用运行中
+
+    # ✅ 关闭前执行（可选）
+    logger.info("FastAPI 即将关闭")
+app = FastAPI(lifespan=lifespan)
 class TTSRequest(BaseModel):
     text: str
     voice_id: str
