@@ -9,6 +9,7 @@ import os
 from fastapi.responses import JSONResponse
 import logging
 
+import SystemConfig
 from TTSPool import TTSPool
 
 logger = logging.getLogger(__name__)
@@ -57,10 +58,19 @@ async def generate_tts(request: TTSRequest):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(
-        "VoiceServer:app",
-        host="0.0.0.0",
-        port=8118,
-        reload=False,
-        log_config="log_config.yml"
-    )
+    if SystemConfig.is_dev_mode:
+        uvicorn.run(
+            "VoiceServer:app",
+            host="0.0.0.0",
+            port=8118,
+            reload=SystemConfig.is_dev_mode,
+            log_config="log_config.yml"
+        )
+    else:
+        uvicorn.run(
+            app,
+            host="0.0.0.0",
+            port=8118,
+            reload=SystemConfig.is_dev_mode,
+            log_config="log_config.yml"
+        )

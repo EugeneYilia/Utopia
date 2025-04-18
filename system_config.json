@@ -1,3 +1,4 @@
 {
-  "is_use_gpu" : true
+  "is_use_gpu" : true,
+  "is_dev_mode": false
 }
